@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Project from '@domain/entities/Project';
 import { fetchProjects } from '@domain/features/projectList/thunks/fetchProjects';
+import { createProject } from '@domain/features/projectDetail/thunks/createProject';
+import ProjectDetail from '@domain/entities/ProjectDetail';
 
 export interface ProjectListSliceState {
   projects: Project[];
@@ -61,6 +63,12 @@ const projectListSlice = createSlice({
         state.loading = false;
         state.projects = action.payload;
         state.error = null;
+      },
+    );
+    builder.addCase(
+      createProject.fulfilled,
+      (state, action: PayloadAction<ProjectDetail>) => {
+        state.projects = [action.payload, ...state.projects];
       },
     );
   },

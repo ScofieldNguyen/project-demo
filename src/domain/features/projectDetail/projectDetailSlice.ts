@@ -1,22 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 import ProjectForm from '@domain/entities/ProjectForm';
 import ProjectDetail from '@domain/entities/ProjectDetail';
+import { createProject } from '@domain/features/projectDetail/thunks/createProject';
 
 export interface ProductDetailSliceState {
   detail: ProjectForm;
+  error: string | null;
+  loading: boolean;
 }
 
-const initialState: ProductDetailSliceState = {
-  detail: {
-    name: null,
-    from: null,
-    to: null,
-    budget: null,
-    description: null,
-    country: null,
-    domain: null,
-  },
-};
+export function createProductDetailInitialState(): ProductDetailSliceState {
+  return {
+    detail: {
+      name: null,
+      from: null,
+      to: null,
+      budget: null,
+      description: null,
+      country: null,
+      domain: null,
+    },
+    error: null,
+    loading: false,
+  };
+}
+
+const initialState: ProductDetailSliceState = createProductDetailInitialState();
 
 const projectDetailSlice = createSlice({
   name: 'projectDetail',
@@ -34,6 +43,14 @@ const projectDetailSlice = createSlice({
         ...action.payload,
       };
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createProject.rejected, (state, action) => {
+      state.error = action.error.message || '';
+    });
+    builder.addCase(createProject.fulfilled, (state, action) => {
+      state.detail = initialState.detail;
+    });
   },
 });
 

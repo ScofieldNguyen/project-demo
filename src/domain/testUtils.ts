@@ -37,5 +37,6 @@ export function createRandomProjectDetail(): ProjectDetail {
 export function createMockAPIService(): APIService {
   return {
     fetchProjects: jest.fn(),
+    createProject: jest.fn(),
   };
 }

@@ -1,5 +1,6 @@
 import projectDetailSlice, {
   clearDetail,
+  createProductDetailInitialState,
   loadDetail,
   ProductDetailSliceState,
   updateDetail,
@@ -10,18 +11,10 @@ describe('test product detail slice', () => {
   test('load project to detail', () => {
     // given
     const project = createRandomProjectDetail();
-    const initialState: ProductDetailSliceState = {
-      detail: {
-        name: null,
-        from: null,
-        to: null,
-        budget: null,
-        description: null,
-        country: null,
-        domain: null,
-      },
-    };
+    const initialState: ProductDetailSliceState =
+      createProductDetailInitialState();
     const expectedState: ProductDetailSliceState = {
+      ...createProductDetailInitialState(),
       detail: project,
     };
 
@@ -36,19 +29,11 @@ describe('test product detail slice', () => {
     // given
     const project = createRandomProjectDetail();
     const initialState: ProductDetailSliceState = {
+      ...createProductDetailInitialState(),
       detail: project,
     };
-    const expectedState: ProductDetailSliceState = {
-      detail: {
-        name: null,
-        from: null,
-        to: null,
-        budget: null,
-        description: null,
-        country: null,
-        domain: null,
-      },
-    };
+    const expectedState: ProductDetailSliceState =
+      createProductDetailInitialState();
 
     // when
     const actual = projectDetailSlice(initialState, clearDetail());
@@ -61,9 +46,11 @@ describe('test product detail slice', () => {
     // given
     const project = createRandomProjectDetail();
     const initialState: ProductDetailSliceState = {
+      ...createProductDetailInitialState(),
       detail: project,
     };
     const expectedState: ProductDetailSliceState = {
+      ...createProductDetailInitialState(),
       detail: {
         ...project,
         name: 'new name',
