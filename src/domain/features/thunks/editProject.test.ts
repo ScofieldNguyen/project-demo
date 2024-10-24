@@ -11,6 +11,7 @@ import {
 } from '@domain/features/projectDetail/projectDetailSlice';
 import { editProject } from '@domain/features/thunks/editProject';
 import { loadProjects } from '@domain/features/projectList/projectListSlice';
+import { fromProjectDetailToProjectForm } from '@domain/entities/ProjectForm';
 
 const apiService = createMockAPIService();
 
@@ -27,7 +28,7 @@ describe('test edit project', () => {
     store.dispatch(loadDetail(productDetail));
 
     // when
-    const form = { ...productDetail };
+    const form = fromProjectDetailToProjectForm(productDetail);
     form.name = 'new name';
     form.domain = 'new domain';
     form.country = 'US';
@@ -68,7 +69,7 @@ describe('test edit project', () => {
     store.dispatch(loadDetail(projectDetail));
 
     // when
-    const form = { ...projectDetail };
+    const form = fromProjectDetailToProjectForm(projectDetail);
     form.name = 'new name';
     form.domain = 'new domain';
     form.country = 'US';

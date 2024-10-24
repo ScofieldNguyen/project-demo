@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import ProjectForm from '@domain/entities/ProjectForm';
+import ProjectForm, {
+  fromProjectDetailToProjectForm,
+} from '@domain/entities/ProjectForm';
 import ProjectDetail from '@domain/entities/ProjectDetail';
 import { createProject } from '@domain/features/thunks/createProject';
 import { editProject } from '@domain/features/thunks/editProject';
 import { removeProject } from '@domain/features/thunks/removeProject';
 import { fetchProject } from '@domain/features/thunks/fetchProject';
+import { RootState } from '@ui/StoreType';
 
 export interface ProductDetailSliceState {
   detail: ProjectForm;
@@ -35,7 +38,7 @@ const projectDetailSlice = createSlice({
   initialState,
   reducers: {
     loadDetail: (state, action: { payload: ProjectDetail }) => {
-      state.detail = action.payload;
+      state.detail = fromProjectDetailToProjectForm(action.payload);
     },
     clearDetail: (state) => {
       state.detail = initialState.detail;
@@ -85,11 +88,14 @@ const projectDetailSlice = createSlice({
       state.loading = false;
       state.error = action.error.message || '';
     });
+    builder.addCase(fetchProject.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(
       fetchProject.fulfilled,
       (state, action: PayloadAction<ProjectDetail>) => {
         state.loading = false;
-        state.detail = action.payload;
+        state.detail = fromProjectDetailToProjectForm(action.payload);
       },
     );
   },
@@ -98,6 +104,8 @@ const projectDetailSlice = createSlice({
 export const loadDetail = projectDetailSlice.actions.loadDetail;
 export const clearDetail = projectDetailSlice.actions.clearDetail;
 export const updateDetail = projectDetailSlice.actions.updateDetail;
+
+export const selectDetail = (state: RootState) => state.projectDetail;
 
 const projectDetailReducer = projectDetailSlice.reducer;
 export default projectDetailReducer;

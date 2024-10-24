@@ -11,13 +11,14 @@ import {
   updateDetail,
 } from '@domain/features/projectDetail/projectDetailSlice';
 import { loadProjects } from '@domain/features/projectList/projectListSlice';
+import { fromProjectDetailToProjectForm } from '@domain/entities/ProjectForm';
 
 const apiService = createMockAPIService();
 
 describe('test create project', () => {
   test('create project failed', async () => {
     // given
-    const form = createRandomProjectDetail();
+    const projectDetail = createRandomProjectDetail();
     const exception: Exception = {
       code: 0,
       message: 'Create project failed',
@@ -27,7 +28,9 @@ describe('test create project', () => {
 
     // when
     store.dispatch(updateDetail({ name: 'name', description: 'description' }));
-    await store.dispatch(createProject(form));
+    await store.dispatch(
+      createProject(fromProjectDetailToProjectForm(projectDetail)),
+    );
 
     // then
     const state = store.getState();
@@ -52,8 +55,8 @@ describe('test create project', () => {
 
   test('create project success', async () => {
     // given
-    const form = createRandomProjectDetail();
-    apiService.createProject = jest.fn().mockResolvedValueOnce(form);
+    const projectDetail = createRandomProjectDetail();
+    apiService.createProject = jest.fn().mockResolvedValueOnce(projectDetail);
     const store = createStore(apiService);
     const projectList = [
       createRandomProject(),
@@ -67,7 +70,9 @@ describe('test create project', () => {
     store.dispatch(loadProjects(projectList));
 
     // when
-    await store.dispatch(createProject(form));
+    await store.dispatch(
+      createProject(fromProjectDetailToProjectForm(projectDetail)),
+    );
 
     // then
     const state = store.getState();
@@ -76,7 +81,7 @@ describe('test create project', () => {
     expect(state.projectList.projects).toHaveLength(projectList.length + 1);
 
     // should be add on top
-    expect(state.projectList.projects[0].id).toBe(form.id);
+    expect(state.projectList.projects[0].id).toBe(projectDetail.id);
 
     // project detail should be cleared
     expect(state.projectDetail.detail).toStrictEqual(

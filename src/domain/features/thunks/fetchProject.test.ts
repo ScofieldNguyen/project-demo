@@ -9,6 +9,7 @@ import {
   loadDetail,
 } from '@domain/features/projectDetail/projectDetailSlice';
 import ProjectDetail from '@domain/entities/ProjectDetail';
+import { fromProjectDetailToProjectForm } from '@domain/entities/ProjectForm';
 
 const apiService: APIService = createMockAPIService();
 
@@ -54,7 +55,9 @@ describe('test fetch projects', () => {
 
     // then
     const state = store.getState();
-    expect(state.projectDetail.detail).toStrictEqual(projectDetail);
+    expect(state.projectDetail.detail).toStrictEqual(
+      fromProjectDetailToProjectForm(projectDetail),
+    );
     expect(state.projectDetail.error).toBe(null);
     expect(state.projectDetail.loading).toBe(false);
   });
@@ -80,7 +83,9 @@ describe('test fetch projects', () => {
 
     // then it should works
     const state = store.getState();
-    expect(state.projectDetail.detail).toStrictEqual(projectDetail);
+    expect(state.projectDetail.detail).toStrictEqual(
+      fromProjectDetailToProjectForm(projectDetail),
+    );
     expect(state.projectDetail.error).toBe(null);
     expect(state.projectDetail.loading).toBe(false);
 

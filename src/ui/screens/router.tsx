@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainLayout from '@ui/MainLayout';
-import ProjectDetailScreen from '@ui/screens/ProjectDetailScreen';
+import { ProjectDetailNavigationWrapper } from '@ui/screens/ProjectDetailScreen';
 import ProjectListScreen from '@ui/screens/ProjectListScreen';
 
 export const router = createBrowserRouter([
@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
       },
       {
         path: ':projectName',
-        element: <ProjectDetailScreen />,
+        element: <ProjectDetailNavigationWrapper />,
       },
     ],
   },

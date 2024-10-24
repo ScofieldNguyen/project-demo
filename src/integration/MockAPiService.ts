@@ -96,8 +96,8 @@ export const mockAPiService: APIService = {
       id: database.projects.length,
       name: form.name || '',
       budget: form.budget || 0,
-      from: form.from || 0,
-      to: form.to || 0,
+      from: form.from ? form.from.millisecond() : 0,
+      to: form.to ? form.to.millisecond() : 0,
       description: form.description || '',
     });
 
@@ -105,8 +105,8 @@ export const mockAPiService: APIService = {
       id: database.projectDetails.length,
       name: form.name || '',
       budget: form.budget || 0,
-      from: form.from || 0,
-      to: form.to || 0,
+      from: form.from ? form.from.millisecond() : 0,
+      to: form.to ? form.to.millisecond() : 0,
       description: form.description || '',
       domain: form.domain || '',
       country: form.country || '',

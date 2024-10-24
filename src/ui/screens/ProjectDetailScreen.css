@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
