@@ -4,4 +4,6 @@ export default interface ProjectForm {
   from: number | null;
   to: number | null;
   budget: number | null;
+  country: string | null;
+  domain: string | null;
 }

@@ -1,5 +1,6 @@
 import Project from '@domain/entities/Project';
 import APIService from '@domain/services/APIService';
+import ProjectDetail from '@domain/entities/ProjectDetail';
 
 function getRandomInt(max = 1000) {
   return Math.floor(Math.random() * max);
@@ -22,6 +23,14 @@ export function createRandomProject(): Project {
     from: getRandomDate(new Date(2020, 0, 1), new Date(2021, 0, 1)).getTime(),
     to: getRandomDate(new Date(2020, 0, 1), new Date(2021, 0, 1)).getTime(),
     budget: seed * 1000,
+  };
+}
+
+export function createRandomProjectDetail(): ProjectDetail {
+  return {
+    ...createRandomProject(),
+    country: 'VN',
+    domain: 'Payment',
   };
 }
 

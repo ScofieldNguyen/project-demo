@@ -4,12 +4,12 @@ import projectDetailSlice, {
   ProductDetailSliceState,
   updateDetail,
 } from '@domain/features/projectDetail/projectDetailSlice';
-import { createRandomProject } from '@domain/testUtils';
+import { createRandomProjectDetail } from '@domain/testUtils';
 
 describe('test product detail slice', () => {
   test('load project to detail', () => {
     // given
-    const project = createRandomProject();
+    const project = createRandomProjectDetail();
     const initialState: ProductDetailSliceState = {
       detail: {
         name: null,
@@ -17,6 +17,8 @@ describe('test product detail slice', () => {
         to: null,
         budget: null,
         description: null,
+        country: null,
+        domain: null,
       },
     };
     const expectedState: ProductDetailSliceState = {
@@ -32,7 +34,7 @@ describe('test product detail slice', () => {
 
   test('clear detail', () => {
     // given
-    const project = createRandomProject();
+    const project = createRandomProjectDetail();
     const initialState: ProductDetailSliceState = {
       detail: project,
     };
@@ -43,6 +45,8 @@ describe('test product detail slice', () => {
         to: null,
         budget: null,
         description: null,
+        country: null,
+        domain: null,
       },
     };
 
@@ -55,7 +59,7 @@ describe('test product detail slice', () => {
 
   test('update detail', () => {
     // given
-    const project = createRandomProject();
+    const project = createRandomProjectDetail();
     const initialState: ProductDetailSliceState = {
       detail: project,
     };

@@ -1,6 +1,6 @@
-import Project from '@domain/entities/Project';
 import { createSlice } from '@reduxjs/toolkit';
 import ProjectForm from '@domain/entities/ProjectForm';
+import ProjectDetail from '@domain/entities/ProjectDetail';
 
 export interface ProductDetailSliceState {
   detail: ProjectForm;
@@ -13,6 +13,8 @@ const initialState: ProductDetailSliceState = {
     to: null,
     budget: null,
     description: null,
+    country: null,
+    domain: null,
   },
 };
 
@@ -20,13 +22,13 @@ const projectDetailSlice = createSlice({
   name: 'projectDetail',
   initialState,
   reducers: {
-    loadDetail: (state, action: { payload: Project }) => {
+    loadDetail: (state, action: { payload: ProjectDetail }) => {
       state.detail = action.payload;
     },
     clearDetail: (state) => {
       state.detail = initialState.detail;
     },
-    updateDetail: (state, action: { payload: Partial<Project> }) => {
+    updateDetail: (state, action: { payload: Partial<ProjectForm> }) => {
       state.detail = {
         ...state.detail,
         ...action.payload,
