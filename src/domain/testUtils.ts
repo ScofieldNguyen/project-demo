@@ -38,5 +38,8 @@ export function createMockAPIService(): APIService {
   return {
     fetchProjects: jest.fn(),
     createProject: jest.fn(),
+    fetchDetailProject: jest.fn(),
+    deleteProject: jest.fn(),
+    editProject: jest.fn(),
   };
 }
