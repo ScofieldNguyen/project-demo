@@ -34,7 +34,9 @@ describe('test fetch projects thunk', () => {
       createRandomProject(),
       createRandomProject(),
     ];
-    apiService.fetchProjects = jest.fn().mockResolvedValueOnce(projects);
+    apiService.fetchProjects = jest
+      .fn()
+      .mockResolvedValueOnce({ list: projects, total: projects.length });
     const store = createStore(apiService);
 
     // when
@@ -63,7 +65,7 @@ describe('test fetch projects thunk', () => {
     apiService.fetchProjects = jest
       .fn()
       .mockRejectedValueOnce(exception)
-      .mockResolvedValueOnce(projects);
+      .mockResolvedValueOnce({ list: projects, total: projects.length });
     const store = createStore(apiService);
 
     // when

@@ -13,10 +13,11 @@ import { parseMsToDateString } from '@ui/utils/parseDate';
 import { formatToCurrency } from '@ui/utils/formatCurrency';
 import { removeProject } from '@domain/features/thunks/removeProject';
 
-export default function ProjectListScreen() {
+export default function ProjectListScreen(props: { pageSize: number }) {
   const projectListData = useSelector(selectProjectListInfo);
   const dispatch: AppDispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const total = projectListData.total;
 
   const columns: ColumnType<Project>[] = [
     {
@@ -85,12 +86,12 @@ export default function ProjectListScreen() {
 
   const paginationOption: TablePaginationConfig = useMemo(
     () => ({
-      pageSize: 10,
-      total: 100,
+      pageSize: props.pageSize,
+      total,
       onChange: handlePagination,
       showSizeChanger: false,
     }),
-    [handlePagination],
+    [handlePagination, props.pageSize, total],
   );
 
   return (

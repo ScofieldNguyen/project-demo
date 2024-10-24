@@ -4,7 +4,7 @@ import Pagination from '@domain/entities/Pagination';
 import APIService from '@domain/services/APIService';
 
 export const fetchProjects = createAsyncThunk<
-  Project[],
+  { list: Project[]; total: number },
   Pagination,
   { extra: { apiService: APIService } }
 >('projects/fetchProjects', async (pagination, { extra }) => {

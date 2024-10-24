@@ -32,7 +32,10 @@ function getItemsByPage(items: any[], pageNumber: number) {
 export const mockAPiService: APIService = {
   fetchProjects: async (pagination: Pagination) => {
     await waitForSeconds(1);
-    return getItemsByPage(database.projects, pagination.page);
+    return {
+      list: getItemsByPage(database.projects, pagination.page),
+      total: database.projects.length,
+    };
   },
   fetchDetailProject: async (id: number) => {
     await waitForSeconds(1);

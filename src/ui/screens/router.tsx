@@ -10,7 +10,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <ProjectListScreen />,
+        element: <ProjectListScreen pageSize={10} />,
       },
       {
         path: ':projectName',

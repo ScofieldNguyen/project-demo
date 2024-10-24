@@ -70,9 +70,10 @@ const projectListSlice = createSlice({
     });
     builder.addCase(
       fetchProjects.fulfilled,
-      (state, action: PayloadAction<Project[]>) => {
+      (state, action: PayloadAction<{ list: Project[]; total: number }>) => {
         state.loading = false;
-        state.projects = action.payload;
+        state.projects = action.payload.list;
+        state.total = action.payload.total;
         state.error = null;
       },
     );
@@ -131,6 +132,7 @@ export const selectProjectListInfo = (state: RootState) => ({
   list: state.projectList.projects,
   loading: state.projectList.loading,
   error: state.projectList.error,
+  total: state.projectList.total,
 });
 
 const projectListReducer = projectListSlice.reducer;

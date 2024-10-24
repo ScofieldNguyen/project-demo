@@ -32,7 +32,7 @@ function renderComponent() {
   render(
     <BrowserRouter>
       <Provider store={store}>
-        <ProjectListScreen />
+        <ProjectListScreen pageSize={5} />
       </Provider>
     </BrowserRouter>,
   );
@@ -44,10 +44,10 @@ describe('test project list screen', () => {
       .fn()
       .mockImplementation((pagination: Pagination) => {
         if (pagination.page === 1) {
-          return Promise.resolve(firstLoad);
+          return Promise.resolve({ list: firstLoad, total: 10 });
         }
         if (pagination.page === 2) {
-          return Promise.resolve(secondLoads);
+          return Promise.resolve({ list: secondLoads, total: 10 });
         }
         return [];
       });

@@ -4,7 +4,9 @@ import ProjectForm from '@domain/entities/ProjectForm';
 import ProjectDetail from '@domain/entities/ProjectDetail';
 
 export default interface APIService {
-  fetchProjects: (pagination: Pagination) => Promise<Project[]>;
+  fetchProjects: (
+    pagination: Pagination,
+  ) => Promise<{ list: Project[]; total: number }>;
   createProject: (form: ProjectForm) => Promise<ProjectDetail>;
   editProject: (id: number, form: ProjectForm) => Promise<ProjectDetail>;
   deleteProject: (id: number) => Promise<number>;
