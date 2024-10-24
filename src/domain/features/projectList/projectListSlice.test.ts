@@ -1,6 +1,7 @@
 import projectListSlice from '@domain/features/projectList/projectListSlice';
 import projectListReducer, {
   addProject,
+  createInitialProjectListState,
   deleteProject,
   loadProjects,
   ProjectListSliceState,
@@ -13,15 +14,10 @@ describe('test project list reducers', () => {
   test('add new project - empty list', () => {
     // given
     const newProject: Project = createRandomProject();
-    const initialState: ProjectListSliceState = {
-      projects: [],
-      loading: false,
-      error: null,
-    };
+    const initialState: ProjectListSliceState = createInitialProjectListState();
     const expectedState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [newProject],
-      loading: false,
-      error: null,
     };
 
     // when
@@ -36,14 +32,12 @@ describe('test project list reducers', () => {
     const newProject: Project = createRandomProject();
     const existingProject: Project = createRandomProject();
     const initialState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [existingProject],
-      loading: false,
-      error: null,
     };
     const expectedState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [newProject, existingProject],
-      loading: false,
-      error: null,
     };
 
     // when
@@ -57,14 +51,12 @@ describe('test project list reducers', () => {
     // given
     const project: Project = createRandomProject();
     const initialState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [project],
-      loading: false,
-      error: null,
     };
     const expectedState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [project],
-      loading: false,
-      error: null,
     };
 
     // when
@@ -92,14 +84,12 @@ describe('test project list reducers', () => {
       budget: 1000000,
     };
     const initialState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [project],
-      loading: false,
-      error: null,
     };
     const expectedState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [updatedProject],
-      loading: false,
-      error: null,
     };
 
     // when
@@ -124,14 +114,12 @@ describe('test project list reducers', () => {
   test('delete project - not found', () => {
     // given
     const initialState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [],
-      loading: false,
-      error: null,
     };
     const expectedState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [],
-      loading: false,
-      error: null,
     };
 
     // when
@@ -145,11 +133,11 @@ describe('test project list reducers', () => {
     // given
     const project: Project = createRandomProject();
     const initialState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [project],
-      loading: false,
-      error: null,
     };
     const expectedState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [],
       loading: false,
       error: null,
@@ -172,11 +160,13 @@ describe('test project list reducers', () => {
       createRandomProject(),
     ];
     const initialState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: [],
       loading: false,
       error: null,
     };
     const expectedState: ProjectListSliceState = {
+      ...createInitialProjectListState(),
       projects: list,
       loading: false,
       error: null,

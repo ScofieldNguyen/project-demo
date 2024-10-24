@@ -6,17 +6,25 @@ import ProjectDetail from '@domain/entities/ProjectDetail';
 import { editProject } from '@domain/features/thunks/editProject';
 import { removeProject } from '@domain/features/thunks/removeProject';
 
+import { RootState } from '@ui/StoreType';
+
 export interface ProjectListSliceState {
   projects: Project[];
   loading: boolean;
   error: string | null;
+  total: number;
 }
 
-const initialState: ProjectListSliceState = {
-  projects: [],
-  loading: false,
-  error: null,
-};
+export function createInitialProjectListState(): ProjectListSliceState {
+  return {
+    projects: [],
+    total: 0,
+    loading: false,
+    error: null,
+  };
+}
+
+const initialState: ProjectListSliceState = createInitialProjectListState();
 
 const projectListSlice = createSlice({
   name: 'projectList',
@@ -118,6 +126,12 @@ export const addProject = projectListSlice.actions.addProject;
 export const updateProject = projectListSlice.actions.updateProject;
 export const deleteProject = projectListSlice.actions.deleteProject;
 export const loadProjects = projectListSlice.actions.loadProjects;
+
+export const selectProjectListInfo = (state: RootState) => ({
+  list: state.projectList.projects,
+  loading: state.projectList.loading,
+  error: state.projectList.error,
+});
 
 const projectListReducer = projectListSlice.reducer;
 export default projectListReducer;

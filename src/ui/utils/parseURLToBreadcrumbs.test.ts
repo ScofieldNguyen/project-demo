@@ -1,4 +1,4 @@
-import parseURLToBreadcrumbs from '@domain/utils/parseURLToBreadcrumbs';
+import parseURLToBreadcrumbs from '@ui/utils/parseURLToBreadcrumbs';
 import BreadcrumbInfo from '@domain/entities/BreadcrumbInfo';
 
 describe('test parse url to breadcrumbs', () => {

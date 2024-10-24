@@ -18,8 +18,8 @@ export function createRandomProject(): Project {
   const seed = getRandomInt();
   return {
     id: seed,
-    name: 'name-' + seed,
-    description: 'description-' + seed,
+    name: 'name ' + seed,
+    description: 'description ' + seed,
     from: getRandomDate(new Date(2020, 0, 1), new Date(2021, 0, 1)).getTime(),
     to: getRandomDate(new Date(2020, 0, 1), new Date(2021, 0, 1)).getTime(),
     budget: seed * 1000,
