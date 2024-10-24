@@ -1,8 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ProjectForm from '@domain/entities/ProjectForm';
 import ProjectDetail from '@domain/entities/ProjectDetail';
 import { createProject } from '@domain/features/thunks/createProject';
 import { editProject } from '@domain/features/thunks/editProject';
+import { removeProject } from '@domain/features/thunks/removeProject';
 
 export interface ProductDetailSliceState {
   detail: ProjectForm;
@@ -67,6 +68,16 @@ const projectDetailSlice = createSlice({
     builder.addCase(editProject.pending, (state) => {
       state.loading = true;
     });
+
+    // remove project
+    builder.addCase(
+      removeProject.fulfilled,
+      (state, action: PayloadAction<number>) => {
+        if (state.detail.id === action.payload) {
+          state.detail = createProductDetailInitialState().detail;
+        }
+      },
+    );
   },
 });
 

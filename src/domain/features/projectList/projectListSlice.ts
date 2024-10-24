@@ -4,6 +4,7 @@ import { fetchProjects } from '@domain/features/thunks/fetchProjects';
 import { createProject } from '@domain/features/thunks/createProject';
 import ProjectDetail from '@domain/entities/ProjectDetail';
 import { editProject } from '@domain/features/thunks/editProject';
+import { removeProject } from '@domain/features/thunks/removeProject';
 
 export interface ProjectListSliceState {
   projects: Project[];
@@ -51,6 +52,7 @@ const projectListSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // fetch projects
     builder.addCase(fetchProjects.pending, (state) => {
       state.loading = true;
     });
@@ -66,12 +68,16 @@ const projectListSlice = createSlice({
         state.error = null;
       },
     );
+
+    // create projects
     builder.addCase(
       createProject.fulfilled,
       (state, action: PayloadAction<ProjectDetail>) => {
         state.projects = [action.payload, ...state.projects];
       },
     );
+
+    // edit projects
     builder.addCase(
       editProject.fulfilled,
       (state, action: PayloadAction<{ id: number; detail: ProjectDetail }>) => {
@@ -85,6 +91,24 @@ const projectListSlice = createSlice({
             ...action.payload.detail,
           };
         }
+      },
+    );
+
+    // delete project
+    builder.addCase(removeProject.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(removeProject.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || '';
+    });
+    builder.addCase(
+      removeProject.fulfilled,
+      (state, action: PayloadAction<number>) => {
+        state.loading = false;
+        state.projects = state.projects.filter(
+          (project) => project.id !== action.payload,
+        );
       },
     );
   },

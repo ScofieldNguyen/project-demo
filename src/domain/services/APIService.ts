@@ -7,4 +7,5 @@ export default interface APIService {
   fetchProjects: (pagination: Pagination) => Promise<Project[]>;
   createProject: (form: ProjectForm) => Promise<ProjectDetail>;
   editProject: (id: number, form: ProjectForm) => Promise<ProjectDetail>;
+  deleteProject: (id: number) => Promise<number>;
 }

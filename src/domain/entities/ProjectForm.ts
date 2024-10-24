@@ -1,4 +1,5 @@
 export default interface ProjectForm {
+  id?: number;
   name: string | null;
   description: string | null;
   from: number | null;
