@@ -42,6 +42,11 @@ describe('Test Project Detail Screen', () => {
 
       // there should be edit button
       expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
+
+      // there should be delete button
+      expect(
+        screen.getByRole('button', { name: 'Delete' }),
+      ).toBeInTheDocument();
     });
 
     test('display error when submit empty data', async () => {

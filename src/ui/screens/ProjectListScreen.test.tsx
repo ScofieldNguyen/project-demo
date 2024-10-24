@@ -70,6 +70,11 @@ describe('test project list screen', () => {
       'href',
       `/projects/${parseNameToURL(firstLoad[0].name)}?id=${firstLoad[0].id}`,
     );
+
+    // row should have a delete button
+    expect(screen.getAllByRole('button', { name: 'Delete' })).toHaveLength(
+      firstLoad.length,
+    );
   });
 
   test('click on page 2, should load the second batch', async () => {

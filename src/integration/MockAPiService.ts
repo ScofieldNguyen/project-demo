@@ -89,8 +89,10 @@ export const mockAPiService: APIService = {
     return item;
   },
   deleteProject: async (id: number) => {
-    database.projectDetails.filter((p) => p.id !== id);
-    database.projects.filter((p) => p.id !== id);
+    database.projectDetails = database.projectDetails.filter(
+      (p) => p.id !== id,
+    );
+    database.projects = database.projects.filter((p) => p.id !== id);
     return id;
   },
 };

@@ -2,7 +2,7 @@ import '@ui/screens/ProjectDetailScreen.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDetail } from '@domain/features/projectDetail/projectDetailSlice';
 import { AppDispatch } from '@ui/StoreType';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { fetchProject } from '@domain/features/thunks/fetchProject';
 import { Button, Form, Input, InputNumber, notification, Skeleton } from 'antd';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -11,6 +11,7 @@ import ProjectForm from '@domain/entities/ProjectForm';
 import validateProjectForm from '@domain/validations/validateProjectForm';
 import { editProject } from '@domain/features/thunks/editProject';
 import { createProject } from '@domain/features/thunks/createProject';
+import { removeProject } from '@domain/features/thunks/removeProject';
 
 export const DetailMode = {
   CREATE: 'CREATE',
@@ -40,24 +41,32 @@ export function ProjectDetailScreen(props: { id?: number }) {
     setEdit(true);
   }, []);
 
+  const onClickDelete = useCallback(() => {
+    if (props.id) dispatch(removeProject(props.id));
+
+    noti.success({
+      message: `Successfully deleted project`,
+    });
+
+    navigate(-1);
+  }, [props.id]);
+
   const onSubmit = useCallback(
     async (formValues: ProjectForm) => {
       const validationResult = await validateProjectForm(formValues);
       if (validationResult.pass) {
         const mode = getMode(props.id);
         if (mode === DetailMode.UPDATE) {
-          dispatch(editProject({ id: props.id!, form: formValues }));
+          await dispatch(editProject({ id: props.id!, form: formValues }));
           noti.success({
             message: `Successfully updated project ${formValues.name}`,
           });
         } else {
-          dispatch(createProject(formValues));
+          await dispatch(createProject(formValues));
           noti.success({
             message: `Successfully created project ${formValues.name}`,
           });
-          setTimeout(() => {
-            navigate(-1);
-          }, 500);
+          navigate(-1);
         }
       } else {
         setErrors(validationResult.errors);
@@ -85,9 +94,15 @@ export function ProjectDetailScreen(props: { id?: number }) {
       <h2>Project {detail.name}</h2>
       <div className={'button-bar'} style={{ maxWidth: 600 }}>
         {!edit && mode === DetailMode.UPDATE && (
-          <Button type={'default'} onClick={onClickEdit}>
-            Edit
-          </Button>
+          <Fragment>
+            <Button type={'default'} onClick={onClickEdit}>
+              Edit
+            </Button>
+
+            <Button type={'primary'} danger={true} onClick={onClickDelete}>
+              Delete
+            </Button>
+          </Fragment>
         )}
       </div>
 
