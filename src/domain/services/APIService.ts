@@ -8,4 +8,5 @@ export default interface APIService {
   createProject: (form: ProjectForm) => Promise<ProjectDetail>;
   editProject: (id: number, form: ProjectForm) => Promise<ProjectDetail>;
   deleteProject: (id: number) => Promise<number>;
+  fetchDetailProject: (id: number) => Promise<ProjectDetail>;
 }

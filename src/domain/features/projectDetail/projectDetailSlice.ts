@@ -4,6 +4,7 @@ import ProjectDetail from '@domain/entities/ProjectDetail';
 import { createProject } from '@domain/features/thunks/createProject';
 import { editProject } from '@domain/features/thunks/editProject';
 import { removeProject } from '@domain/features/thunks/removeProject';
+import { fetchProject } from '@domain/features/thunks/fetchProject';
 
 export interface ProductDetailSliceState {
   detail: ProjectForm;
@@ -76,6 +77,19 @@ const projectDetailSlice = createSlice({
         if (state.detail.id === action.payload) {
           state.detail = createProductDetailInitialState().detail;
         }
+      },
+    );
+
+    // fetch project detail
+    builder.addCase(fetchProject.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || '';
+    });
+    builder.addCase(
+      fetchProject.fulfilled,
+      (state, action: PayloadAction<ProjectDetail>) => {
+        state.loading = false;
+        state.detail = action.payload;
       },
     );
   },
