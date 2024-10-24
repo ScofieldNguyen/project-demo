@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
-import MainLayout from '@ui/MainLayout';
+import { RouterProvider } from 'react-router-dom';
+import { router } from '@ui/screens/router';
 
 function App() {
   return (
     <div className="App">
-      <MainLayout />
+      <RouterProvider router={router} />
     </div>
   );
 }

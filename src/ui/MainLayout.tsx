@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout, theme } from 'antd';
+import { Outlet } from 'react-router-dom';
 import { Content } from 'antd/es/layout/layout';
 import DynamicBreadCrumb from '@ui/components/DynamicBreadCrumb';
 
@@ -18,7 +19,7 @@ export default function MainLayout() {
         }}
         className={'main-content'}
       >
-        Content
+        <Outlet />
       </Content>
     </Layout>
   );
