@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import ProjectForm from '@domain/entities/ProjectForm';
 import ProjectDetail from '@domain/entities/ProjectDetail';
 import { createProject } from '@domain/features/projectDetail/thunks/createProject';
+import { editProject } from '@domain/features/projectDetail/thunks/editProject';
 
 export interface ProductDetailSliceState {
   detail: ProjectForm;
@@ -45,11 +46,26 @@ const projectDetailSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // Create Project
     builder.addCase(createProject.rejected, (state, action) => {
       state.error = action.error.message || '';
+      state.loading = false;
+    });
+    builder.addCase(createProject.pending, (state) => {
+      state.loading = true;
     });
     builder.addCase(createProject.fulfilled, (state, action) => {
       state.detail = initialState.detail;
+      state.loading = false;
+    });
+
+    // Edit Project
+    builder.addCase(editProject.rejected, (state, action) => {
+      state.error = action.error.message || '';
+      state.loading = false;
+    });
+    builder.addCase(editProject.pending, (state) => {
+      state.loading = true;
     });
   },
 });

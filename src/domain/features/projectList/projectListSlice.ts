@@ -3,6 +3,7 @@ import Project from '@domain/entities/Project';
 import { fetchProjects } from '@domain/features/projectList/thunks/fetchProjects';
 import { createProject } from '@domain/features/projectDetail/thunks/createProject';
 import ProjectDetail from '@domain/entities/ProjectDetail';
+import { editProject } from '@domain/features/projectDetail/thunks/editProject';
 
 export interface ProjectListSliceState {
   projects: Project[];
@@ -69,6 +70,21 @@ const projectListSlice = createSlice({
       createProject.fulfilled,
       (state, action: PayloadAction<ProjectDetail>) => {
         state.projects = [action.payload, ...state.projects];
+      },
+    );
+    builder.addCase(
+      editProject.fulfilled,
+      (state, action: PayloadAction<{ id: number; detail: ProjectDetail }>) => {
+        const projectIndex = state.projects.findIndex(
+          (project) => project.id === action.payload.id,
+        );
+
+        if (projectIndex !== -1) {
+          state.projects[projectIndex] = {
+            ...state.projects[projectIndex],
+            ...action.payload.detail,
+          };
+        }
       },
     );
   },
