@@ -85,6 +85,9 @@ describe('Test Project Detail Screen', () => {
     });
 
     test('Change name and submit data', async () => {
+      apiService.editProject = jest.fn().mockResolvedValue({
+        detail: projectDetail,
+      });
       renderComponent(projectDetail.id);
 
       // wait for the API calling

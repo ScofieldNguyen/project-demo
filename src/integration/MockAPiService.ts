@@ -1,8 +1,7 @@
 import APIService from '@domain/services/APIService';
 import Pagination from '@domain/entities/Pagination';
-import { createRandomProject } from '@domain/testUtils';
-import ProjectDetail from '@domain/entities/ProjectDetail';
-import Project from '@domain/entities/Project';
+import { fromProjectFormToProjectDetail } from '@domain/entities/ProjectDetail';
+import { MockData } from '@integration/MockData';
 
 function waitForSeconds(seconds: number) {
   return new Promise((resolve) => {
@@ -10,24 +9,10 @@ function waitForSeconds(seconds: number) {
   });
 }
 
-const database: {
-  projects: Project[];
-  projectDetails: ProjectDetail[];
-} = (() => {
-  const projects: Project[] = [];
-  const projectDetails: ProjectDetail[] = [];
-
-  for (let i = 0; i <= 99; i++) {
-    const project = createRandomProject();
-    projects.push(project);
-    projectDetails.push({ ...project, country: 'VN', domain: 'Payment' });
-  }
-
-  return {
-    projects,
-    projectDetails,
-  };
-})();
+const database = {
+  projects: MockData,
+  projectDetails: MockData,
+};
 
 function getItemsByPage(items: any[], pageNumber: number) {
   const itemsPerPage = 10;
@@ -61,22 +46,22 @@ export const mockAPiService: APIService = {
   editProject: async (id: number, form) => {
     await waitForSeconds(1);
 
-    database.projectDetails.filter((p) => {
+    database.projectDetails = database.projectDetails.map((p) => {
       if (p.id === id) {
         return {
           ...p,
-          form,
+          ...fromProjectFormToProjectDetail(id, form),
         };
       } else {
         return p;
       }
     });
 
-    database.projects.filter((p) => {
+    database.projects = database.projects.map((p) => {
       if (p.id === id) {
         return {
           ...p,
-          form,
+          ...fromProjectFormToProjectDetail(id, form),
         };
       } else {
         return p;
@@ -92,25 +77,14 @@ export const mockAPiService: APIService = {
   },
   createProject: async (form) => {
     await waitForSeconds(1);
-    database.projects.push({
-      id: database.projects.length,
-      name: form.name || '',
-      budget: form.budget || 0,
-      from: form.from ? form.from.millisecond() : 0,
-      to: form.to ? form.to.millisecond() : 0,
-      description: form.description || '',
-    });
+    database.projects.push(
+      fromProjectFormToProjectDetail(database.projects.length, form),
+    );
 
-    const item = {
-      id: database.projectDetails.length,
-      name: form.name || '',
-      budget: form.budget || 0,
-      from: form.from ? form.from.millisecond() : 0,
-      to: form.to ? form.to.millisecond() : 0,
-      description: form.description || '',
-      domain: form.domain || '',
-      country: form.country || '',
-    };
+    const item = fromProjectFormToProjectDetail(
+      database.projectDetails.length,
+      form,
+    );
     database.projectDetails.push(item);
     return item;
   },

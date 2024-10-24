@@ -74,16 +74,13 @@ describe('test edit project', () => {
     form.domain = 'new domain';
     form.country = 'US';
 
-    // change form
-    await store.dispatch(updateDetail(form));
-
     // call edit project thunk
     await store.dispatch(editProject({ id: projectDetail.id, form }));
 
     // then
     const state = store.getState();
 
-    // detail should be kept
+    // detail should be updated
     expect(state.projectDetail.detail).toStrictEqual(form);
 
     // item outside in the list should also be updated

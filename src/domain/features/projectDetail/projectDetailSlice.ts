@@ -72,6 +72,10 @@ const projectDetailSlice = createSlice({
     builder.addCase(editProject.pending, (state) => {
       state.loading = true;
     });
+    builder.addCase(editProject.fulfilled, (state, action) => {
+      state.loading = false;
+      state.detail = fromProjectDetailToProjectForm(action.payload.detail);
+    });
 
     // remove project
     builder.addCase(

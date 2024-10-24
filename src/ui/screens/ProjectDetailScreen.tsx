@@ -4,7 +4,7 @@ import { selectDetail } from '@domain/features/projectDetail/projectDetailSlice'
 import { AppDispatch } from '@ui/StoreType';
 import { useCallback, useEffect, useState } from 'react';
 import { fetchProject } from '@domain/features/thunks/fetchProject';
-import { Button, Form, Input, InputNumber, Skeleton } from 'antd';
+import { Button, Form, Input, InputNumber, notification, Skeleton } from 'antd';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DatePicker } from 'antd/lib';
 import ProjectForm from '@domain/entities/ProjectForm';
@@ -26,8 +26,9 @@ function getMode(id?: number) {
 }
 
 export function ProjectDetailScreen(props: { id?: number }) {
-  const { detail, loading } = useSelector(selectDetail);
+  const { detail, loading, error } = useSelector(selectDetail);
   const [form] = Form.useForm<ProjectForm>();
+  const [noti, contextHolder] = notification.useNotification();
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const mode = getMode(props.id);
@@ -35,7 +36,9 @@ export function ProjectDetailScreen(props: { id?: number }) {
   const [edit, setEdit] = useState<boolean>(mode === DetailMode.CREATE);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const onClickEdit = useCallback(() => setEdit(true), []);
+  const onClickEdit = useCallback(() => {
+    setEdit(true);
+  }, []);
 
   const onSubmit = useCallback(
     async (formValues: ProjectForm) => {
@@ -44,10 +47,18 @@ export function ProjectDetailScreen(props: { id?: number }) {
         const mode = getMode(props.id);
         if (mode === DetailMode.UPDATE) {
           dispatch(editProject({ id: props.id!, form: formValues }));
+          noti.success({
+            message: `Successfully updated project ${formValues.name}`,
+          });
         } else {
           dispatch(createProject(formValues));
+          noti.success({
+            message: `Successfully created project ${formValues.name}`,
+          });
+          setTimeout(() => {
+            navigate(-1);
+          }, 500);
         }
-        navigate(-1);
       } else {
         setErrors(validationResult.errors);
       }
@@ -64,21 +75,13 @@ export function ProjectDetailScreen(props: { id?: number }) {
     form.setFieldsValue(detail);
   }, [detail, form]);
 
-  if (loading) {
-    return (
-      <Skeleton loading={true}>
-        <Skeleton.Input />
-        <Skeleton.Input />
-        <Skeleton.Input />
-        <Skeleton.Input />
-        <Skeleton.Input />
-        <Skeleton.Input />
-      </Skeleton>
-    );
-  }
+  useEffect(() => {
+    if (error) noti.error({ message: error });
+  }, [error]);
 
   return (
     <div className={'container'}>
+      {contextHolder}
       <h2>Project {detail.name}</h2>
       <div className={'button-bar'} style={{ maxWidth: 600 }}>
         {!edit && mode === DetailMode.UPDATE && (
@@ -87,93 +90,105 @@ export function ProjectDetailScreen(props: { id?: number }) {
           </Button>
         )}
       </div>
-      <Form
-        form={form}
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
-        disabled={!edit}
-        style={{ maxWidth: 600 }}
-        onFinish={onSubmit}
-      >
-        <Form.Item label="ID" name={'id'}>
-          <Input disabled={true} />
-        </Form.Item>
-        <Form.Item
-          label="Name"
-          name={'name'}
-          validateStatus={errors['name'] ? 'error' : ''}
-          help={errors['name']}
+
+      {loading ? (
+        <Skeleton loading={true} style={{ maxWidth: 600 }}>
+          <Skeleton.Input />
+          <Skeleton.Input />
+          <Skeleton.Input />
+          <Skeleton.Input />
+          <Skeleton.Input />
+          <Skeleton.Input />
+        </Skeleton>
+      ) : (
+        <Form
+          form={form}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 14 }}
+          layout="horizontal"
+          disabled={!edit}
+          style={{ maxWidth: 600 }}
+          onFinish={onSubmit}
         >
-          <Input placeholder={'Enter name'} data-testid={'name-input'} />
-        </Form.Item>
-        <Form.Item
-          label="Description"
-          name={'description'}
-          validateStatus={errors['description'] ? 'error' : ''}
-          help={errors['description']}
-        >
-          <Input placeholder={'Enter description'} />
-        </Form.Item>
-        <Form.Item
-          label="From"
-          name={'from'}
-          validateStatus={errors['from'] ? 'error' : ''}
-          help={errors['from']}
-        >
-          <DatePicker
-            format="DD/MM/YYYY"
-            disabled={!edit}
-            data-testid={'from-picker'}
-          />
-        </Form.Item>
-        <Form.Item
-          label="To"
-          name={'to'}
-          validateStatus={errors['to'] ? 'error' : ''}
-          help={errors['to']}
-        >
-          <DatePicker
-            format="DD/MM/YYYY"
-            disabled={!edit}
-            data-testid={'to-picker'}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Budget"
-          name={'budget'}
-          validateStatus={errors['budget'] ? 'error' : ''}
-          help={errors['budget']}
-        >
-          <InputNumber placeholder={'Enter budget'} addonAfter="$" />
-        </Form.Item>
-        <Form.Item
-          label="Country"
-          name={'country'}
-          validateStatus={errors['country'] ? 'error' : ''}
-          help={errors['country']}
-        >
-          <Input placeholder={'Enter country'} />
-        </Form.Item>
-        <Form.Item
-          label="Domain"
-          name={'domain'}
-          validateStatus={errors['domain'] ? 'error' : ''}
-          help={errors['domain']}
-        >
-          <Input placeholder={'Enter domain'} />
-        </Form.Item>
-        {edit && mode === DetailMode.UPDATE && (
-          <Button type={'primary'} htmlType="submit">
-            Save
-          </Button>
-        )}
-        {mode === DetailMode.CREATE && (
-          <Button type={'primary'} htmlType="submit">
-            Create
-          </Button>
-        )}
-      </Form>
+          <Form.Item label="ID" name={'id'}>
+            <Input disabled={true} />
+          </Form.Item>
+          <Form.Item
+            label="Name"
+            name={'name'}
+            validateStatus={errors['name'] ? 'error' : ''}
+            help={errors['name']}
+          >
+            <Input placeholder={'Enter name'} data-testid={'name-input'} />
+          </Form.Item>
+          <Form.Item
+            label="Description"
+            name={'description'}
+            validateStatus={errors['description'] ? 'error' : ''}
+            help={errors['description']}
+          >
+            <Input placeholder={'Enter description'} />
+          </Form.Item>
+          <Form.Item
+            label="From"
+            name={'from'}
+            validateStatus={errors['from'] ? 'error' : ''}
+            help={errors['from']}
+          >
+            <DatePicker
+              format="DD/MM/YYYY"
+              disabled={!edit}
+              data-testid={'from-picker'}
+            />
+          </Form.Item>
+          <Form.Item
+            label="To"
+            name={'to'}
+            validateStatus={errors['to'] ? 'error' : ''}
+            help={errors['to']}
+          >
+            <DatePicker
+              format="DD/MM/YYYY"
+              disabled={!edit}
+              data-testid={'to-picker'}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Budget"
+            name={'budget'}
+            validateStatus={errors['budget'] ? 'error' : ''}
+            help={errors['budget']}
+          >
+            <InputNumber placeholder={'Enter budget'} addonAfter="$" />
+          </Form.Item>
+          <Form.Item
+            label="Country"
+            name={'country'}
+            validateStatus={errors['country'] ? 'error' : ''}
+            help={errors['country']}
+          >
+            <Input placeholder={'Enter country'} />
+          </Form.Item>
+          <Form.Item
+            label="Domain"
+            name={'domain'}
+            validateStatus={errors['domain'] ? 'error' : ''}
+            help={errors['domain']}
+          >
+            <Input placeholder={'Enter domain'} />
+          </Form.Item>
+          {edit && mode === DetailMode.UPDATE && (
+            <Button type={'primary'} htmlType="submit">
+              Save
+            </Button>
+          )}
+          {mode === DetailMode.CREATE && (
+            <Button type={'primary'} htmlType="submit">
+              Create
+            </Button>
+          )}
+        </Form>
+      )}
     </div>
   );
 }
