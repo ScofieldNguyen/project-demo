@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Project from '@domain/entities/Project';
-import { fetchProjects } from '@domain/features/projectList/thunks/fetchProjects';
-import { createProject } from '@domain/features/projectDetail/thunks/createProject';
+import { fetchProjects } from '@domain/features/thunks/fetchProjects';
+import { createProject } from '@domain/features/thunks/createProject';
 import ProjectDetail from '@domain/entities/ProjectDetail';
-import { editProject } from '@domain/features/projectDetail/thunks/editProject';
+import { editProject } from '@domain/features/thunks/editProject';
 
 export interface ProjectListSliceState {
   projects: Project[];

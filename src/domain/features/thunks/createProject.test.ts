@@ -5,7 +5,7 @@ import {
 } from '@domain/testUtils';
 import Exception from '@domain/entities/Exception';
 import createStore from '@domain/features/store';
-import { createProject } from '@domain/features/projectDetail/thunks/createProject';
+import { createProject } from '@domain/features/thunks/createProject';
 import {
   createProductDetailInitialState,
   updateDetail,

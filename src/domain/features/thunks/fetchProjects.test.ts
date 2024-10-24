@@ -1,6 +1,6 @@
 import { createMockAPIService, createRandomProject } from '@domain/testUtils';
 import createStore from '@domain/features/store';
-import { fetchProjects } from '@domain/features/projectList/thunks/fetchProjects';
+import { fetchProjects } from '@domain/features/thunks/fetchProjects';
 import Exception from '@domain/entities/Exception';
 
 const apiService = createMockAPIService();

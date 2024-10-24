@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import ProjectForm from '@domain/entities/ProjectForm';
 import ProjectDetail from '@domain/entities/ProjectDetail';
-import { createProject } from '@domain/features/projectDetail/thunks/createProject';
-import { editProject } from '@domain/features/projectDetail/thunks/editProject';
+import { createProject } from '@domain/features/thunks/createProject';
+import { editProject } from '@domain/features/thunks/editProject';
 
 export interface ProductDetailSliceState {
   detail: ProjectForm;

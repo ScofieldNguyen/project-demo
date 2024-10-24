@@ -9,7 +9,7 @@ import {
   loadDetail,
   updateDetail,
 } from '@domain/features/projectDetail/projectDetailSlice';
-import { editProject } from '@domain/features/projectDetail/thunks/editProject';
+import { editProject } from '@domain/features/thunks/editProject';
 import { loadProjects } from '@domain/features/projectList/projectListSlice';
 
 const apiService = createMockAPIService();
