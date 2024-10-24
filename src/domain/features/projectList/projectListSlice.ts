@@ -1,12 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Project from '@domain/entities/Project';
+import { fetchProjects } from '@domain/features/projectList/thunks/fetchProjects';
 
 export interface ProjectListSliceState {
   projects: Project[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: ProjectListSliceState = {
   projects: [],
+  loading: false,
+  error: null,
 };
 
 const projectListSlice = createSlice({
@@ -18,7 +23,10 @@ const projectListSlice = createSlice({
     },
     updateProject: (
       state,
-      action: { payload: { id: number; updatedProject: Partial<Project> } },
+      action: PayloadAction<{
+        id: number;
+        updatedProject: Partial<Project>;
+      }>,
     ) => {
       const projectIndex = state.projects.findIndex(
         (project) => project.id === action.payload.id,
@@ -30,14 +38,31 @@ const projectListSlice = createSlice({
         };
       }
     },
-    deleteProject: (state, action: { payload: number }) => {
+    deleteProject: (state, action: PayloadAction<number>) => {
       state.projects = state.projects.filter(
         (project) => project.id !== action.payload,
       );
     },
-    loadProjects: (state, action: { payload: Project[] }) => {
+    loadProjects: (state, action: PayloadAction<Project[]>) => {
       state.projects = [...state.projects, ...action.payload];
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProjects.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchProjects.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || '';
+    });
+    builder.addCase(
+      fetchProjects.fulfilled,
+      (state, action: PayloadAction<Project[]>) => {
+        state.loading = false;
+        state.projects = action.payload;
+        state.error = null;
+      },
+    );
   },
 });
 

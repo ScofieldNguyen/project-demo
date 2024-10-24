@@ -64,8 +64,8 @@ describe('test product detail slice', () => {
         ...project,
         name: 'new name',
         description: 'new description',
-        from: new Date(1996, 8, 1),
-        to: new Date(2024, 10, 23),
+        from: new Date(1996, 8, 1).getTime(),
+        to: new Date(2024, 10, 23).getTime(),
         budget: 1000000,
       },
     };
@@ -76,8 +76,8 @@ describe('test product detail slice', () => {
       updateDetail({
         name: 'new name',
         description: 'new description',
-        from: new Date(1996, 8, 1),
-        to: new Date(2024, 10, 23),
+        from: new Date(1996, 8, 1).getTime(),
+        to: new Date(2024, 10, 23).getTime(),
         budget: 1000000,
       }),
     );

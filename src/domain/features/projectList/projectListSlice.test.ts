@@ -15,9 +15,13 @@ describe('test project list reducers', () => {
     const newProject: Project = createRandomProject();
     const initialState: ProjectListSliceState = {
       projects: [],
+      loading: false,
+      error: null,
     };
     const expectedState: ProjectListSliceState = {
       projects: [newProject],
+      loading: false,
+      error: null,
     };
 
     // when
@@ -33,9 +37,13 @@ describe('test project list reducers', () => {
     const existingProject: Project = createRandomProject();
     const initialState: ProjectListSliceState = {
       projects: [existingProject],
+      loading: false,
+      error: null,
     };
     const expectedState: ProjectListSliceState = {
       projects: [newProject, existingProject],
+      loading: false,
+      error: null,
     };
 
     // when
@@ -50,9 +58,13 @@ describe('test project list reducers', () => {
     const project: Project = createRandomProject();
     const initialState: ProjectListSliceState = {
       projects: [project],
+      loading: false,
+      error: null,
     };
     const expectedState: ProjectListSliceState = {
       projects: [project],
+      loading: false,
+      error: null,
     };
 
     // when
@@ -75,15 +87,19 @@ describe('test project list reducers', () => {
       ...project,
       name: 'new name',
       description: 'new description',
-      from: new Date(1996, 8, 1),
-      to: new Date(2024, 10, 23),
+      from: new Date(1996, 8, 1).getTime(),
+      to: new Date(2024, 10, 23).getTime(),
       budget: 1000000,
     };
     const initialState: ProjectListSliceState = {
       projects: [project],
+      loading: false,
+      error: null,
     };
     const expectedState: ProjectListSliceState = {
       projects: [updatedProject],
+      loading: false,
+      error: null,
     };
 
     // when
@@ -94,8 +110,8 @@ describe('test project list reducers', () => {
         updatedProject: {
           name: 'new name',
           description: 'new description',
-          from: new Date(1996, 8, 1),
-          to: new Date(2024, 10, 23),
+          from: new Date(1996, 8, 1).getTime(),
+          to: new Date(2024, 10, 23).getTime(),
           budget: 1000000,
         },
       }),
@@ -109,9 +125,13 @@ describe('test project list reducers', () => {
     // given
     const initialState: ProjectListSliceState = {
       projects: [],
+      loading: false,
+      error: null,
     };
     const expectedState: ProjectListSliceState = {
       projects: [],
+      loading: false,
+      error: null,
     };
 
     // when
@@ -126,9 +146,13 @@ describe('test project list reducers', () => {
     const project: Project = createRandomProject();
     const initialState: ProjectListSliceState = {
       projects: [project],
+      loading: false,
+      error: null,
     };
     const expectedState: ProjectListSliceState = {
       projects: [],
+      loading: false,
+      error: null,
     };
 
     // when
@@ -149,9 +173,13 @@ describe('test project list reducers', () => {
     ];
     const initialState: ProjectListSliceState = {
       projects: [],
+      loading: false,
+      error: null,
     };
     const expectedState: ProjectListSliceState = {
       projects: list,
+      loading: false,
+      error: null,
     };
 
     // when

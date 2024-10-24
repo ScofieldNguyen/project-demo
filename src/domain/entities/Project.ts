@@ -2,7 +2,7 @@ export default interface Project {
   id: number;
   name: string;
   description: string;
-  from: Date;
-  to: Date;
+  from: number;
+  to: number;
   budget: number;
 }
